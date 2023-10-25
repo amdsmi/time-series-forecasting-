@@ -134,12 +134,12 @@ class Encoder(nn.Module):
         batch_size, seq_len = seq.shape[0], seq.shape[1]
         positions = torch.arange(0, seq_len).expand(batch_size, seq_len).to(self.device)
 
-        out = self.dropout((self.feature_embedding(seq) + self.positional_embedding(positions)))
+        out_ = self.dropout((self.feature_embedding(seq) + self.positional_embedding(positions)))
         for layer in self.layers:
             # query key and value is the same in encoder
-            out = layer(out, out, out, mask)
+            out_ = layer(out_, out_, out_, mask)
 
-        return out
+        return out_
 
 
 class DecoderBlock(nn.Module):
@@ -256,10 +256,10 @@ class Transformer(nn.Module):
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    x = torch.rand(1000, 10, 5).to(
+    x = torch.rand(64, 10, 5).to(
         device
     )
-    trg = torch.rand(1000, 10, 2).to(device)
+    trg = torch.rand(64, 10, 2).to(device)
     model = Transformer(device=device).to(
         device
     )
