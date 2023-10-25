@@ -9,15 +9,15 @@ import config as cfg
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-dataset = WaterDataSet(root_dir='train.csv',
-                       source_len=10,
-                       target_len=10,
-                       output_len=10,
-                       step_ahead=1,
-                       data_col=['Water_Temp', 'EC', 'DO', 'ORP', 'PH', 'CHLOROPHYL'],
-                       target_col=['CHLOROPHYL'])
+dataset = WaterDataSet(root_dir=cfg.train_file_path,
+                       source_len=cfg.input_source_seq_len,
+                       target_len=cfg.input_target_seq_len,
+                       output_len=cfg.output_seq_len,
+                       step_ahead=cfg.number_step_ahead,
+                       data_col=cfg.input_col,
+                       target_col=cfg.target_col)
 
-data_loader = DataLoader(dataset=dataset, batch_size=64, shuffle=True)
+data_loader = DataLoader(dataset=dataset, batch_size=cfg.batch_size, shuffle=True)
 
 transformer = Transformer(
     input_feature=cfg.input_feature,
